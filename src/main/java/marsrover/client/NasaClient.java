@@ -18,8 +18,4 @@ public class NasaClient {
         String url = this.baseUrl + "rovers/" + rover + "/photos?earth_date=" + date + "&api_key=" + this.apiKey;
         return restTemplate.getForObject(url, ImageList.class);
     }
-
-    public void saveImagesFromFile() {
-        System.out.println("Hey from client");
-    }
 }
