@@ -27,9 +27,13 @@
 /nbdist/
 /.nb-gradle/
 
+### Server ###
+cache
+
 ### UI ###
 node_modules
 .cache
+public/js/index.js
 
 ### Code ###
 .vscode
