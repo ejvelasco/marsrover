@@ -79,7 +79,6 @@ public class NasaClient {
 
     public File getImage(String rover, String date) throws Exception {
         try {
-            System.out.println(date);
             String nasaDate = dateToNasaFormat(date, 0);
             String id = rover + nasaDate;
             UUID uuid = UUID.nameUUIDFromBytes(id.getBytes());
