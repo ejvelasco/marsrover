@@ -27,7 +27,12 @@
 /nbdist/
 /.nb-gradle/
 
-# UI
+### UI ###
 node_modules
 .cache
+
+### Code ###
 .vscode
+
+### Mac ###
+.DS_Store

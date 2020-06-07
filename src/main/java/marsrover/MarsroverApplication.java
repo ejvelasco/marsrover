@@ -9,7 +9,13 @@ import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.nio.file.Files;
 import java.util.concurrent.Callable;
+import java.util.UUID;
+import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.file.StandardCopyOption;
+import java.net.URL;
 import org.springframework.core.io.ClassPathResource;
 
 import java.text.ParseException;
@@ -37,8 +43,11 @@ public class MarsroverApplication {
 	private final String[] patterns = { "MM/dd/yy", "MMM dd, yyyy", "MMM-dd-yyyy" };
 	private final String fileName = "dates.txt";
 	private final String nasaPattern = "yyyy-MM-dd";
+	private final String nasaImageExtension = ".jpeg";
+	private final String roverName = "curiosity";
+	private final String cacheDir = "cache/";
 	private final SimpleDateFormat nasaDateFormat = strictFormat(nasaPattern);
-	private final int nThreads = 10;
+	private final int nThreads = 4;
 	private final ExecutorService executorService = Executors.newFixedThreadPool(nThreads);
 
 	public SimpleDateFormat strictFormat(String pattern) {
@@ -52,9 +61,26 @@ public class MarsroverApplication {
 			File file = new ClassPathResource(fileName).getFile();
 			Scanner scanner = new Scanner(file);
 			while (scanner.hasNextLine()) {
-				Callable<String> task = new FetchDateImageTask(scanner);
-				Future<String> future = executorService.submit(task);
-				System.out.println(future.get());
+				// Callable<String> task = new FetchDateImageTask(scanner);
+				// Future<String> future = executorService.submit(task);
+				// System.out.println(future.get());
+				String dateLine = scanner.nextLine();
+				String date = dateToNasaFormat(dateLine, 0);
+				UUID dateUUID = UUID.nameUUIDFromBytes(date.getBytes());
+				String imageFileName = cacheDir + dateUUID + nasaImageExtension;
+				File imageFile = new File(imageFileName);
+				if (!imageFile.isFile()) {
+					ImageList imageList = nasaClient.getImages(roverName, date);
+					Image[] images = imageList.getImages();
+					if (images.length > 0) {
+						String url = images[0].getSource();
+						InputStream in = new URL(url).openStream();
+						Files.copy(in, imageFile.toPath());
+						in.close();
+					} else {
+						// no images for date
+					}
+				}
 			}
 			executorService.shutdown();
 			scanner.close();
@@ -75,12 +101,22 @@ public class MarsroverApplication {
 		public String call() throws Exception {
 			String dateLine = scanner.nextLine();
 			String date = dateToNasaFormat(dateLine, 0);
-			ImageList imageList = nasaClient.getImages("curiosity", date);
-			Image[] images = imageList.getImages();
-			if (images.length > 0) {
-				return images[0].getSource();
+			UUID dateUUID = UUID.nameUUIDFromBytes(date.getBytes());
+			String imageFileName = cacheDir + dateUUID + nasaImageExtension;
+			File imageFile = new File(imageFileName);
+			if (!imageFile.isFile()) {
+				ImageList imageList = nasaClient.getImages(roverName, date);
+				Image[] images = imageList.getImages();
+				if (images.length > 0) {
+					String url = images[0].getSource();
+					InputStream in = new URL(url).openStream();
+					Files.copy(in, imageFile.toPath());
+					in.close();
+				} else {
+					// no images for date
+				}
 			}
-			return "";
+			return imageFileName;
 		}
 	}
 
