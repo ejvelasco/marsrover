@@ -13,10 +13,8 @@ import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 import java.util.Date;
 import java.util.logging.Logger;
 import java.util.UUID;
@@ -71,12 +69,11 @@ public class NasaClient {
             while ((line = reader.readLine()) != null) {
                 // fetch and save image from date
                 Callable<File> task = new FetchDateImageTask(line);
-                Future<File> future = executorService.submit(task);
-                future.get();
+                executorService.submit(task);
             }
             executorService.shutdown();
             reader.close();
-        } catch (InterruptedException | ExecutionException | IOException e) {
+        } catch (IOException e) {
             logger.severe(e.getMessage());
         }
     }
