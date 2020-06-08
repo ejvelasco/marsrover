@@ -29,13 +29,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const formatDate = (selectedDate: Date) => {
+  return selectedDate.toISOString().split('T')[0];
+};
+
+function isValidDate(dateString) {
+  var regEx = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateString.match(regEx)) return false; // Invalid format
+  var d = new Date(dateString);
+  var dNum = d.getTime();
+  if (!dNum && dNum !== 0) return false; // NaN value, Invalid date
+  return d.toISOString().slice(0, 10) === dateString;
+}
+
 export const RoverGrid = () => {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = React.useState(new Date(defaultDate));
   const [selectedRover, setSelectedRover] = React.useState(defaultRover);
-  const formatDate = (selectedDate: Date) => {
-    return selectedDate.toISOString().split('T')[0];
-  };
 
   return (
     <div className={classes.root}>
@@ -78,7 +88,11 @@ export const RoverGrid = () => {
                 shrink: true,
               }}
               onChange={(event) => {
-                setSelectedDate(new Date(event.target.value));
+                const date = event.target.value;
+                if (!isValidDate(date)) {
+                  return;
+                }
+                setSelectedDate(new Date(date));
               }}
             />
           </FormControl>
