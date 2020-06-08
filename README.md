@@ -1,3 +1,10 @@
+## Dependencies:
+
+- OpenJDK 14
+- Gradle 6.4.1
+- Docker 19.03.8
+- Node 12.17.0
+
 ## Run App as a Docker Container
 
 ### 1. Build ui:
@@ -46,6 +53,7 @@ Run from IDE (Recommended) OR
 
 ### Backend:
 
+- Follow standard for Dockerizing a Spring / React webapp
 - Use environment variables for values like the NASA API key
 - Cache eviction policy
 - Cache persistence within container
@@ -56,5 +64,6 @@ Run from IDE (Recommended) OR
 ### Frontend:
 
 - Show loading state in cards
+- Handle errors
 - Handle no images for a given date
 - Frontend unit tests
