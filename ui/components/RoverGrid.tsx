@@ -33,9 +33,6 @@ export const RoverGrid = () => {
   const classes = useStyles();
   const [selectedDate, setSelectedDate] = React.useState(new Date(defaultDate));
   const [selectedRover, setSelectedRover] = React.useState(defaultRover);
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
   const formatDate = (selectedDate: Date) => {
     return selectedDate.toISOString().split('T')[0];
   };

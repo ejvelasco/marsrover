@@ -23,7 +23,7 @@ export const RoverImageCard = ({ date, rover, maxWidth }) => {
     return first + s.slice(1);
   };
   const capitalRover = capitalize(rover);
-  const imageEndpoint = `api/rovers/${rover}/image`;
+  const imageEndpoint = `api/rovers/${rover}/images`;
 
   return (
     <Card className={classes.root}>
