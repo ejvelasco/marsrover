@@ -1,5 +1,7 @@
 ## MarsRover App
 
+![Screenshot](https://imgur.com/7nEDrln)
+
 An end-to-end web app built with Spring Boot and React.
 
 ### Key Features:
