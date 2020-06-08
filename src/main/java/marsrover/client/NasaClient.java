@@ -75,8 +75,6 @@ public class NasaClient {
     }
 
     public ImageList getImages(String rover, String date) {
-        // TODO: default values
-        // TODO: format date
         String url = this.baseUrl + "rovers/" + rover + "/photos?earth_date=" + date + "&api_key=" + this.apiKey;
         return restTemplate.getForObject(url, ImageList.class);
     }

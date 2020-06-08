@@ -1,6 +1,8 @@
 package marsrover.endpoints;
 
 import java.io.File;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +26,16 @@ public class ImageEndpoint {
     @RequestMapping(value = "/rovers/{rover}/image", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getImgUrl(@PathVariable String rover, @RequestParam(value = "date") String date) {
         try {
-            File file = nasaClient.getImage(rover, date);
-            byte[] bytes = Files.readAllBytes(file.toPath());
+            String decodedDate = URLDecoder.decode(date, StandardCharsets.UTF_8);
+            File file = nasaClient.getImage(rover, decodedDate);
+            byte[] bytes = new byte[0];
+            if (file.isFile()) {
+                bytes = Files.readAllBytes(file.toPath());
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+            }
             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
