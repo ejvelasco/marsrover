@@ -1,8 +1,16 @@
+buildscript {
+	dependencies {
+		classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.20.1')
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.3.0.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 }
+
+apply plugin: 'com.palantir.docker'
 
 group = 'NASA'
 version = '1.0.0'
@@ -21,4 +29,11 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+docker {
+    dependsOn build
+    name "${bootJar.baseName}"
+    files bootJar.archivePath
+    buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
 }
