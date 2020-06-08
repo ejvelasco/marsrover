@@ -60,6 +60,8 @@ npm run build
 docker run -p 8080:8080 -t marsrover -d
 ```
 
+The server will be listening on http://localhost:8080/
+
 ## Run Locally
 
 ### 1. Watch ui directory for changes:
