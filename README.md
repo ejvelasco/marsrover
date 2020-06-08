@@ -2,7 +2,7 @@
 
 ![Screenshot](https://i.imgur.com/7nEDrln.jpg)
 
-An end-to-end web app built with Spring Boot and React.
+An end-to-end web app built with Spring Boot and React that fetches images from the NASA api: https://api.nasa.gov/.
 
 ### Key Features:
 
@@ -93,6 +93,7 @@ Run from IDE (Recommended) OR
 - Cache eviction policy
 - Cache persistence within container
 - More specific error handling and usage of HTTP codes
+- Create robust logging entity
 - More thorough testing
 - Static analysis
 
