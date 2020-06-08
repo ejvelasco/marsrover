@@ -17,7 +17,6 @@ An end-to-end web app built with Spring Boot and React.
   - View images from dates in `dates.txt`
   - Enter a rover name and a date and view that image
   - Uses hooks for state management
-  - Responsive
 
 ## REST API
 
@@ -98,4 +97,5 @@ Run from IDE (Recommended) OR
 - Show loading state in cards
 - Handle errors
 - Handle no images for a given date
+- Cancel in flight requests
 - Frontend unit tests
