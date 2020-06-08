@@ -19,7 +19,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.Date;
 import java.util.logging.Logger;
-import java.util.Scanner;
 import java.util.UUID;
 
 import org.springframework.core.io.ClassPathResource;

@@ -23,7 +23,7 @@ public class ImageEndpoint {
     @Autowired
     private NasaClient nasaClient;
 
-    @RequestMapping(value = "/rovers/{rover}/image", method = RequestMethod.GET)
+    @RequestMapping(value = "/rovers/{rover}/images", method = RequestMethod.GET)
     public ResponseEntity<byte[]> getImgUrl(@PathVariable String rover, @RequestParam(value = "date") String date) {
         try {
             String decodedDate = URLDecoder.decode(date, StandardCharsets.UTF_8);
