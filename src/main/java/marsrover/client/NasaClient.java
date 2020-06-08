@@ -5,6 +5,8 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -43,15 +45,14 @@ public class NasaClient {
     private final static Logger logger = Logger.getLogger(NasaClient.class.getName());
 
     class FetchDateImageTask implements Callable<File> {
-        private final Scanner scanner;
+        private final String date;
 
-        FetchDateImageTask(Scanner scanner) {
-            this.scanner = scanner;
+        FetchDateImageTask(String date) {
+            this.date = date;
         }
 
         @Override
         public File call() throws Exception {
-            String date = scanner.nextLine();
             return getImage(roverName, date);
         }
     }
@@ -60,15 +61,16 @@ public class NasaClient {
     public void getImagesFromDatesFile() {
         try {
             logger.info("Getting images from file: " + fileName);
-            File file = new ClassPathResource(fileName).getFile();
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                Callable<File> task = new FetchDateImageTask(scanner);
+            InputStream inputStream = new ClassPathResource(fileName).getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Callable<File> task = new FetchDateImageTask(line);
                 Future<File> future = executorService.submit(task);
                 future.get();
             }
             executorService.shutdown();
-            scanner.close();
+            reader.close();
         } catch (InterruptedException | ExecutionException | IOException e) {
             logger.severe(e.getMessage());
         }

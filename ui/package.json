@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "dev": "parcel watch index.tsx --out-dir ../public/js",
-    "build": "parcel build index.tsx --out-dir ../public/js"
+    "dev": "parcel watch index.tsx --out-dir ../src/main/resources/public/js",
+    "build": "parcel build ui/index.tsx --out-dir ../src/main/resources/public/js"
   },
   "author": "Eduardo J. Velasco",
   "license": "MIT",
