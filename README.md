@@ -1,4 +1,4 @@
-## Run app as a Docker container:
+## Run App as a Docker Container
 
 ### 1. Build ui:
 
@@ -20,9 +20,9 @@ npm run build
 docker run -p 8080:8080 -t marsrover -d
 ```
 
-## To run locally:
+## Run Locally
 
-### 1. Watch ui dir for changes:
+### 1. Watch ui directory for changes:
 
 ```
 cd ui
@@ -36,7 +36,7 @@ Run from IDE (Recommended) OR
 ./gradlew bootRun
 ```
 
-## Unit Tests
+## Run Unit Tests
 
 ```
 ./gradlew test
