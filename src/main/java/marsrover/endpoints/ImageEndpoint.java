@@ -28,7 +28,6 @@ public class ImageEndpoint {
             byte[] bytes = Files.readAllBytes(file.toPath());
             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

@@ -3,6 +3,7 @@ package marsrover.client;
 import javax.annotation.PostConstruct;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -10,10 +11,12 @@ import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.Date;
+import java.util.logging.Logger;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -37,24 +40,7 @@ public class NasaClient {
     private final String roverName = "curiosity";
     private final int nThreads = 4;
     private final ExecutorService executorService = Executors.newFixedThreadPool(nThreads);
-
-    @PostConstruct
-    public void getImagesFromDatesFile() {
-        try {
-            File file = new ClassPathResource(fileName).getFile();
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                Callable<File> task = new FetchDateImageTask(scanner);
-                Future<File> future = executorService.submit(task);
-                future.get();
-            }
-            executorService.shutdown();
-            scanner.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
-    }
+    private final static Logger logger = Logger.getLogger(NasaClient.class.getName());
 
     class FetchDateImageTask implements Callable<File> {
         private final Scanner scanner;
@@ -67,6 +53,24 @@ public class NasaClient {
         public File call() throws Exception {
             String date = scanner.nextLine();
             return getImage(roverName, date);
+        }
+    }
+
+    @PostConstruct
+    public void getImagesFromDatesFile() {
+        try {
+            logger.info("Getting images from file: " + fileName);
+            File file = new ClassPathResource(fileName).getFile();
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                Callable<File> task = new FetchDateImageTask(scanner);
+                Future<File> future = executorService.submit(task);
+                future.get();
+            }
+            executorService.shutdown();
+            scanner.close();
+        } catch (InterruptedException | ExecutionException | IOException e) {
+            logger.severe(e.getMessage());
         }
     }
 
@@ -85,6 +89,7 @@ public class NasaClient {
             String imageFileName = cacheDir + uuid;
             File imageFile = new File(imageFileName);
             if (!imageFile.isFile()) {
+                logger.info("Getting image for date: " + nasaDate + " and rover: " + rover);
                 ImageList imageList = getImages(rover, nasaDate);
                 Image[] images = imageList.getImages();
                 if (images.length > 0) {
@@ -99,19 +104,21 @@ public class NasaClient {
                     Files.copy(in, imageFile.toPath());
                     in.close();
                 } else {
-                    // no images for date
+                    logger.info("No images found for date: " + nasaDate + " and rover: " + rover);
                 }
-
+            } else {
+                logger.info("File found in cache: " + imageFileName);
             }
             return imageFile;
         } catch (Exception e) {
+            logger.severe(e.getMessage());
             throw e;
         }
     }
 
     public String dateToNasaFormat(String dateLine, int idx) throws Exception {
         if (idx >= patterns.length) {
-            throw new Exception("Date format not recognized");
+            throw new Exception("Invalid date: " + dateLine);
         }
         try {
             SimpleDateFormat lineDateFormat = strictFormat(patterns[idx]);
