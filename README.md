@@ -1,4 +1,34 @@
-## Dependencies:
+## MarsRover App
+
+An end-to-end web app built with Spring Boot and React.
+Key Features:
+
+- On start up:
+  - Read dates from specified text file `dates.txt`
+  - Fetch first image available for the Curiosity rover for each date
+  - Save image in local cache
+  - Image fetching and saving is done concurrently for each date. Probably overkill for now, but would greatly speed up the process with a large dates file. The number of threads is configurable.
+- Caching:
+  - Caching works by forming a consistent UUID from a rover and date strings
+  - If an image exists for a given rover and a date, that image in the cache will be returned
+- React App:
+  - View images from dates in `dates.txt`
+  - Enter a rover name and a date and view that image
+  - Uses hooks for state management
+  - Responsive
+
+## REST API
+
+- `GET` `/api/rovers/<rover>/images?date=<date>`
+- Returns the first image available for rover <rover> and date <date>
+- <date> must be url encoded
+- Supported <date> formats:
+  - MM/dd/yy
+  - MMM dd, yyyy
+  - MMM-dd-yyyy
+  - yyyy-MM-dd
+
+## Dependencies
 
 - OpenJDK 14
 - Gradle 6.4.1
