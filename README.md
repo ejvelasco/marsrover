@@ -41,3 +41,20 @@ Run from IDE (Recommended) OR
 ```
 ./gradlew test
 ```
+
+## Areas for Improvement
+
+### Backend:
+
+- Use environment variables for values like the NASA API key
+- Cache eviction policy
+- Cache persistence within container
+- More specific error handling and usage of HTTP codes
+- More thorough testing
+- Static analysis
+
+### Frontend:
+
+- Show loading state in cards
+- Handle no images for a given date
+- Frontend unit tests
