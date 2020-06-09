@@ -6,10 +6,10 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 
-const trollImageUrl =
+const TROLL_IMAGE_URL =
   'https://images-na.ssl-images-amazon.com/images/I/51w7koDjFsL._AC_.jpg';
-const badDate = 'April 31, 2018';
-const trollMessage = 'Cute';
+const BAD_DATE = 'April 31, 2018';
+const TROLL_MESSAGE = 'Cute';
 
 export const RoverImageCard = ({ date, rover, maxWidth }) => {
   const useStyles = makeStyles({
@@ -33,8 +33,8 @@ export const RoverImageCard = ({ date, rover, maxWidth }) => {
           alt={`Image from ${date}`}
           height="140"
           image={
-            date === badDate
-              ? trollImageUrl
+            date === BAD_DATE
+              ? TROLL_IMAGE_URL
               : `${imageEndpoint}?date=${encodeURIComponent(date)}`
           }
           title={date}
@@ -44,7 +44,7 @@ export const RoverImageCard = ({ date, rover, maxWidth }) => {
             {date}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {date === badDate ? trollMessage : capitalRover}
+            {date === BAD_DATE ? TROLL_MESSAGE : capitalRover}
           </Typography>
         </CardContent>
       </CardActionArea>

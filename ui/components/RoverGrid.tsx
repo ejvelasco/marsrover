@@ -10,9 +10,9 @@ import {
 } from '@material-ui/core';
 import { RoverImageCard } from './RoverImageCard';
 
-const dates = ['02/27/17', 'June 2, 2018', 'Jul-13-2016', 'April 31, 2018'];
-const defaultDate = '2020-06-04';
-const defaultRover = 'curiosity';
+const DATES = ['02/27/17', 'June 2, 2018', 'Jul-13-2016', 'April 31, 2018'];
+const DEFAULT_DATE = '2020-06-04';
+const DEFAULT_ROVER = 'curiosity';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,15 +44,17 @@ function isValidDate(dateString) {
 
 export const RoverGrid = () => {
   const classes = useStyles();
-  const [selectedDate, setSelectedDate] = React.useState(new Date(defaultDate));
-  const [selectedRover, setSelectedRover] = React.useState(defaultRover);
+  const [selectedDate, setSelectedDate] = React.useState(
+    new Date(DEFAULT_DATE)
+  );
+  const [selectedRover, setSelectedRover] = React.useState(DEFAULT_ROVER);
 
   return (
     <div className={classes.root}>
       <Grid container spacing={4}>
-        {dates.map((date) => (
+        {DATES.map((date) => (
           <Grid item xs={6} sm={3} key={date}>
-            <RoverImageCard date={date} maxWidth={300} rover={defaultRover} />
+            <RoverImageCard date={date} maxWidth={300} rover={DEFAULT_ROVER} />
           </Grid>
         ))}
         <Grid item xs={6} sm={3}>
