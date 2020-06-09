@@ -83,7 +83,7 @@ public class NasaClient {
         return restTemplate.getForObject(url, ImageList.class);
     }
 
-    public File getImage(String rover, String date) throws Exception {
+    public File getImage(String rover, String date) throws DateFormatException, IOException {
         try {
             // format incoming date
             String nasaDate = dateToNasaFormat(date, 0);
@@ -118,15 +118,15 @@ public class NasaClient {
                 logger.info("File found in cache: " + imageFileName);
             }
             return imageFile;
-        } catch (Exception e) {
+        } catch (DateFormatException | IOException e) {
             logger.severe(e.getMessage());
             throw e;
         }
     }
 
-    public String dateToNasaFormat(String dateLine, int idx) throws Exception {
+    public String dateToNasaFormat(String dateLine, int idx) throws DateFormatException {
         if (idx >= patterns.length) {
-            throw new Exception("Invalid date: " + dateLine);
+            throw new DateFormatException("Invalid date: " + dateLine);
         }
         try {
             SimpleDateFormat lineDateFormat = strictFormat(patterns[idx]);

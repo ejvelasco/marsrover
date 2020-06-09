@@ -1,6 +1,7 @@
 package marsrover.endpoints;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import marsrover.client.NasaClient;
+import marsrover.client.DateFormatException;
 
 @RestController
 @RequestMapping("api")
@@ -24,7 +26,7 @@ public class ImageEndpoint {
     private NasaClient nasaClient;
 
     @RequestMapping(value = "/rovers/{rover}/images", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> getImgUrl(@PathVariable String rover, @RequestParam(value = "date") String date) {
+    public ResponseEntity<byte[]> getImage(@PathVariable String rover, @RequestParam(value = "date") String date) {
         try {
             String decodedDate = URLDecoder.decode(date, StandardCharsets.UTF_8);
             File file = nasaClient.getImage(rover, decodedDate);
@@ -33,7 +35,9 @@ public class ImageEndpoint {
                 bytes = Files.readAllBytes(file.toPath());
             }
             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
-        } catch (Exception e) {
+        } catch (DateFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
