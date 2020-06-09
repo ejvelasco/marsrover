@@ -27,8 +27,8 @@
 /nbdist/
 /.nb-gradle/
 
-### Server ###
-cache
+cache/*
+!cache/.gitkeep 
 
 ### UI ###
 node_modules
