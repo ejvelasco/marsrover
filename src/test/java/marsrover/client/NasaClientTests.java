@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringBootTest
-class MarsroverApplicationTests {
+class NasaClientTests {
     @Autowired
     private NasaClient nasaClient;
     private final String[] dates = { "02/27/17", "June 2, 2018", "Jul-13-2016" };
@@ -28,13 +28,14 @@ class MarsroverApplicationTests {
         }
     }
 
+    @Test
     void TestGetImage() throws Exception {
         for (String date : dates) {
             File image = nasaClient.getImage(rover, date);
             Assertions.assertEquals(true, image.isFile());
         }
 
-        for (String date : dates) {
+        for (String date : badDates) {
             Assertions.assertThrows(Exception.class, () -> nasaClient.getImage(rover, date));
         }
     }

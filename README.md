@@ -89,10 +89,11 @@ Run from IDE (Recommended) OR
 ### Backend:
 
 - Follow standard for Dockerizing a Spring / React webapp
+- Extend API and follow a spec
+- Documentation via Javadoc as opposed to explaining my thought process inline
 - Use environment variables for values like the NASA API key
 - Cache eviction policy
 - Cache persistence within container
-- More specific error handling and usage of HTTP codes
 - Create robust logging entity
 - More thorough testing
 - Static analysis
