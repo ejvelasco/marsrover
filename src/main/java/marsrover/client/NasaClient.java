@@ -58,7 +58,6 @@ public class NasaClient {
         }
     }
 
-    @PostConstruct
     public void getImagesFromDatesFile() {
         try {
             // read dates file
